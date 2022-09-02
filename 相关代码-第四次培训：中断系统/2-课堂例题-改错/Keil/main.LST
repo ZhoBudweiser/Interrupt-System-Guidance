@@ -1,0 +1,82 @@
+C51 COMPILER V9.00   MAIN                                                                  10/30/2021 18:03:33 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: D:\软件\Keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          /*****************************
+   2          *第四次培训-课堂例题-改错题
+   3          *修改时间:      2021-10-30
+   4          *******************************/
+   5          #include <reg52.h>
+   6          
+   7          /*按键引脚定义*/
+   8          sbit K1 = P3^2;
+   9          
+  10          /*LED引脚定义*/
+  11          #define LED P2
+  12          
+  13          /*全局变量定义*/
+  14          bit isOn = 0;                   //LED灯亮灭控制
+  15          
+  16          /*延时函数*/
+  17          void delay_ms(uint16 x)         //@11.0592MHz
+*** ERROR C141 IN LINE 17 OF MAIN.C: syntax error near 'x', expected ')'
+  18          {
+  19   1              uint8 i = 2; j = 199;
+*** ERROR C202 IN LINE 19 OF MAIN.C: 'uint8': undefined identifier
+*** ERROR C141 IN LINE 19 OF MAIN.C: syntax error near 'i'
+*** ERROR C202 IN LINE 19 OF MAIN.C: 'j': undefined identifier
+  20   1      
+  21   1              while (x--)
+*** ERROR C202 IN LINE 21 OF MAIN.C: 'x': undefined identifier
+  22   1              {
+  23   2                      _nop_();
+  24   2                      do
+  25   2                      {
+  26   3                              while (--j);
+  27   3                      } while (--i);          
+  28   2              }
+  29   1      
+  30   1              return 0;
+  31   1      }
+  32          
+  33          /*主函数*/
+  34          void mian()
+  35          {
+  36   1              Int0Init();
+  37   1              LED = 0x00;                     //LED全灭
+  38   1              while (1)
+  39   1              {
+  40   2                      if (isOn)
+  41   2                      {
+  42   3                              LED = ~LED;
+  43   3                              Delay_ms(500);                  
+  44   3                      }
+  45   2              }
+  46   1      }
+  47          
+  48          /*外部中断0初始化函数*/
+  49          void Int0Init()
+  50          {
+C51 COMPILER V9.00   MAIN                                                                  10/30/2021 18:03:33 PAGE 2   
+
+  51   1              IT0 = 1;                //跳变沿触发方式（下降沿）
+  52   1              EX0 = 1;                //打开 INT0 的中断允许
+  53   1      }
+  54          
+  55          /*外部中断0处理函数，实现某位LED的闪烁控制*/
+  56          void Int0()     interrupt 1
+  57          {
+  58   1              Delay_ms(5);     //延时消抖
+  59   1              if(k1 == 1)
+  60   1              {
+  61   2                      isOn = ~isOn;
+  62   2              }
+  63   1              while (!k1);
+  64   1      }
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  5 ERROR(S)
